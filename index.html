@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCA Computer Aptitude Assessment System - CU</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #0ea5e9;
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-bottom: 1px solid var(--card-border);
+            padding: 1.5rem 2rem;
+            text-align: center;
+        }
+
+        .cu-badge {
+            display: inline-block;
+            background: rgba(37, 99, 235, 0.15);
+            color: #60a5fa;
+            border: 1px solid rgba(37, 99, 235, 0.4);
+            padding: 0.35rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            max-width: 700px;
+            margin: 0 auto 1.25rem;
+        }
+
+        .action-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.65rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--card-border);
+        }
+
+        .btn-outline:hover {
+            background: var(--card-bg);
+            border-color: #64748b;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            width: 100%;
+            flex: 1;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            margin-bottom: 2rem;
+        }
+
+        /* Test Controls */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .cat-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .cat-card:hover, .cat-card.active {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .cat-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .cat-count {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        /* Question Screen */
+        .q-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .q-badge {
+            background: #3b82f6;
+            color: #fff;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .q-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+
+        .option-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            color: var(--text-main);
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-btn:hover {
+            border-color: #60a5fa;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .option-btn.selected {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.25);
+            font-weight: 600;
+        }
+
+        .nav-btns {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+        }
+
+        /* Results Screen */
+        .score-box {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            margin-bottom: 2rem;
+        }
+
+        .score-num {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--success);
+        }
+
+        .grade-badge {
+            display: inline-block;
+            font-size: 1.25rem;
+            font-weight: 700;
+            padding: 0.35rem 1.25rem;
+            border-radius: 9999px;
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--success);
+            border: 1px solid var(--success);
+            margin-top: 0.5rem;
+        }
+
+        .review-card {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .correct-tag { color: var(--success); font-weight: 600; }
+        .wrong-tag { color: var(--danger); font-weight: 600; }
+        .explanation {
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+            color: #93c5fd;
+            background: rgba(37, 99, 235, 0.1);
+            padding: 0.6rem 0.9rem;
+            border-radius: 6px;
+        }
+
+        footer {
+            border-top: 1px solid var(--card-border);
+            padding: 1.5rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="cu-badge">CHANDIGARH UNIVERSITY (CU) • MCA GENERAL</div>
+        <h1>MCA Computer Aptitude Assessment System</h1>
+        <p class="subtitle">Complete C++ Object-Oriented Project with Interactive Live Assessment, Question Bank, & Performance Diagnostics</p>
+        <div class="action-links">
+            <a href="https://github.com/rajababu21632-ctrl/MCA-Computer-Aptitude-Assessment-System" target="_blank" class="btn btn-primary">
+                ⭐ View C++ Source on GitHub
+            </a>
+            <a href="exam_system.exe" download class="btn btn-outline">
+                💻 Download C++ Executable (.exe)
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Start / Category Screen -->
+        <div id="start-screen" class="card">
+            <h2>Select Assessment Module</h2>
+            <p style="color: var(--text-muted); margin-top: 0.5rem;">Choose a specific domain or appear for the complete MCA Computer Aptitude examination.</p>
+            
+            <div class="category-grid">
+                <div class="cat-card active" onclick="selectCategory('')">
+                    <div class="cat-title">⚡ Comprehensive Test</div>
+                    <div class="cat-count">All 20 Questions (All Topics)</div>
+                </div>
+                <div class="cat-card" onclick="selectCategory('Computer Fundamentals')">
+                    <div class="cat-title">💻 Fundamentals & Logic</div>
+                    <div class="cat-count">4 Questions</div>
+                </div>
+                <div class="cat-card" onclick="selectCategory('C++ OOP Concepts')">
+                    <div class="cat-title">⚙️ C++ & OOP Concepts</div>
+                    <div class="cat-count">4 Questions</div>
+                </div>
+                <div class="cat-card" onclick="selectCategory('Data Structures')">
+                    <div class="cat-title">🌳 Data Structures & Algo</div>
+                    <div class="cat-count">4 Questions</div>
+                </div>
+                <div class="cat-card" onclick="selectCategory('Operating Systems')">
+                    <div class="cat-title">🖥️ Operating Systems</div>
+                    <div class="cat-count">4 Questions</div>
+                </div>
+                <div class="cat-card" onclick="selectCategory('Database Management')">
+                    <div class="cat-title">🗄️ DBMS & SQL</div>
+                    <div class="cat-count">4 Questions</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                <button class="btn btn-primary" onclick="startTest()">🚀 Start Online Assessment</button>
+            </div>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="card hidden">
+            <div class="q-header">
+                <div>
+                    <span id="q-category" class="q-badge">Category</span>
+                    <span style="color: var(--text-muted); font-size: 0.9rem; margin-left: 0.5rem;" id="q-counter">Question 1 of 20</span>
+                </div>
+                <div id="q-marks" style="color: #60a5fa; font-weight: 600;">1 Mark</div>
+            </div>
+
+            <div id="q-text" class="q-text">Question statement goes here?</div>
+
+            <div id="options-container">
+                <!-- Option buttons dynamically generated -->
+            </div>
+
+            <div class="nav-btns">
+                <button class="btn btn-outline" onclick="skipQuestion()">Skip</button>
+                <button id="next-btn" class="btn btn-primary" onclick="nextQuestion()">Next Question →</button>
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result-screen" class="card hidden">
+            <h2>Official Assessment Scorecard</h2>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Chandigarh University • MCA Computer Aptitude Evaluation</p>
+
+            <div class="score-box">
+                <div id="final-score" class="score-num">0%</div>
+                <div id="final-marks" style="color: var(--text-muted); margin-top: 0.5rem; font-size: 1.1rem;">Score: 0 / 0</div>
+                <div id="final-grade" class="grade-badge">Grade: A+</div>
+            </div>
+
+            <h3 style="margin-bottom: 1rem;">Answer Key & Technical Explanations</h3>
+            <div id="review-container">
+                <!-- Review cards dynamically generated -->
+            </div>
+
+            <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                <button class="btn btn-primary" onclick="restartTest()">🔄 Take Another Assessment</button>
+                <a href="https://github.com/rajababu21632-ctrl/MCA-Computer-Aptitude-Assessment-System" target="_blank" class="btn btn-outline">
+                    View Project Code on GitHub
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        MCA General Academic Project • Chandigarh University (CU) • Developed by Raja Babu in C++17
+    </footer>
+
+    <script>
+        const questions = [
+            {
+                id: 1,
+                category: "Computer Fundamentals",
+                text: "What is the 2's complement representation of -13 in an 8-bit binary system?",
+                options: ["11110011", "11110010", "00001101", "11111101"],
+                correct: 0,
+                exp: "13 in 8-bit binary is 00001101. 1's complement is 11110010. Adding 1 gives 2's complement: 11110011."
+            },
+            {
+                id: 2,
+                category: "Computer Fundamentals",
+                text: "Which register holds the memory address of the next instruction to be fetched and executed?",
+                options: ["Accumulator (AC)", "Program Counter (PC)", "Instruction Register (IR)", "Memory Data Register (MDR)"],
+                correct: 1,
+                exp: "The Program Counter (PC) stores the memory location of the next machine code instruction to execute."
+            },
+            {
+                id: 3,
+                category: "Computer Fundamentals",
+                text: "Which cache mapping technique allows any main memory block to be placed in any cache line?",
+                options: ["Direct Mapping", "Set-Associative Mapping", "Fully Associative Mapping", "Sector Mapping"],
+                correct: 2,
+                exp: "In Fully Associative Mapping, a memory block can occupy any arbitrary cache line, minimizing conflict misses."
+            },
+            {
+                id: 4,
+                category: "Computer Fundamentals",
+                text: "In Boolean algebra, what is the simplified output of (A + B)(A + B')?",
+                options: ["A", "B", "A + B", "AB"],
+                correct: 0,
+                exp: "(A+B)(A+B') = A*A + AB' + BA + BB'. Since A*A=A, BB'=0, A + A(B'+B) = A + A(1) = A."
+            },
+            {
+                id: 5,
+                category: "C++ OOP Concepts",
+                text: "Why should a base class destructor always be declared virtual in C++?",
+                options: [
+                    "To allow dynamic polymorphism in normal functions",
+                    "To ensure proper derived class destructor execution when deleted via base pointer",
+                    "To make the class an abstract base class",
+                    "To prevent copying of derived class objects"
+                ],
+                correct: 1,
+                exp: "Declaring a virtual destructor ensures that deleting via base pointer invokes derived destructor first, preventing leaks."
+            },
+            {
+                id: 6,
+                category: "C++ OOP Concepts",
+                text: "What is the fundamental difference between dynamic_cast and static_cast in C++?",
+                options: [
+                    "dynamic_cast performs compile-time checks whereas static_cast does runtime checking",
+                    "dynamic_cast performs runtime RTTI safety checks and returns nullptr on failed pointer downcasts",
+                    "static_cast can only be used on primitive types",
+                    "dynamic_cast is faster than static_cast"
+                ],
+                correct: 1,
+                exp: "dynamic_cast uses RTTI at runtime to safely downcast polymorphic pointers/references, returning nullptr on failure."
+            },
+            {
+                id: 7,
+                category: "C++ OOP Concepts",
+                text: "Which of the following members CANNOT be inherited by a derived class in C++?",
+                options: [
+                    "Protected data members",
+                    "Public member functions",
+                    "Constructors, Destructors, and Assignment Operators",
+                    "Virtual member functions"
+                ],
+                correct: 2,
+                exp: "Constructors, destructors, and assignment operators are specific to the class initialization and not inherited by default."
+            },
+            {
+                id: 8,
+                category: "C++ OOP Concepts",
+                text: "What happens if an exception is thrown inside a C++ destructor during stack unwinding?",
+                options: [
+                    "The exception is ignored and program continues",
+                    "std::terminate is immediately called resulting in program termination",
+                    "The compiler throws a warning and catches it automatically",
+                    "The object is reconstructed"
+                ],
+                correct: 1,
+                exp: "If an exception leaves a destructor during stack unwinding, std::terminate() is called immediately."
+            },
+            {
+                id: 9,
+                category: "Data Structures",
+                text: "What is the worst-case time complexity of searching an element in an unbalanced Binary Search Tree (BST)?",
+                options: ["O(log N)", "O(1)", "O(N)", "O(N log N)"],
+                correct: 2,
+                exp: "In a skewed BST (degenerate tree resembling a linked list), search traversal takes O(N) comparisons."
+            },
+            {
+                id: 10,
+                category: "Data Structures",
+                text: "Which data structure is primarily utilized by compilers to perform syntax parsing and nested bracket matching?",
+                options: ["Queue", "Stack", "Binary Heap", "Disjoint Set"],
+                correct: 1,
+                exp: "Stack follows LIFO (Last In First Out), making it ideal for tracking matching pairs of parentheses and nested tags."
+            },
+            {
+                id: 11,
+                category: "Data Structures",
+                text: "What is the minimum number of comparisons needed in the worst case to find the minimum and maximum of N elements?",
+                options: ["2N - 2", "3N/2 - 2", "N log N", "N - 1"],
+                correct: 1,
+                exp: "By comparing elements in pairs, we need 3N/2 - 2 comparisons, much better than 2N - 2."
+            },
+            {
+                id: 12,
+                category: "Data Structures",
+                text: "Which sorting algorithm is guaranteed to be stable and has O(N log N) time complexity in all cases?",
+                options: ["Quick Sort", "Heap Sort", "Merge Sort", "Selection Sort"],
+                correct: 2,
+                exp: "Merge Sort is stable with consistent O(N log N) runtime across best, average, and worst permutations."
+            },
+            {
+                id: 13,
+                category: "Operating Systems",
+                text: "Which of the following is NOT one of the Coffman conditions required for a deadlock to occur?",
+                options: ["Mutual Exclusion", "Hold and Wait", "Preemption allowed", "Circular Wait"],
+                correct: 2,
+                exp: "Deadlock requires NO PREEMPTION. If preemption is allowed, deadlocks cannot form."
+            },
+            {
+                id: 14,
+                category: "Operating Systems",
+                text: "What phenomenon occurs when excessive time is spent by the OS swapping pages in and out rather than executing processes?",
+                options: ["Paging", "Thrashing", "Segmentation", "Belady's Anomaly"],
+                correct: 1,
+                exp: "Thrashing occurs when memory is overcommitted and the OS spends virtually all CPU cycles on page fault handling."
+            },
+            {
+                id: 15,
+                category: "Operating Systems",
+                text: "What is the key advantage of User-Level Threads (ULT) over Kernel-Level Threads (KLT)?",
+                options: [
+                    "ULTs can achieve true multi-core parallelism",
+                    "Context switching overhead is minimal since no kernel mode switch is required",
+                    "If one ULT blocks, other threads continue seamlessly",
+                    "ULTs have direct access to hardware interrupts"
+                ],
+                correct: 1,
+                exp: "ULT thread management occurs in user space without incurring expensive kernel trap overhead."
+            },
+            {
+                id: 16,
+                category: "Operating Systems",
+                text: "Which CPU scheduling algorithm can suffer from the 'Convoy Effect'?",
+                options: ["Round Robin (RR)", "Shortest Job First (SJF)", "First-Come First-Served (FCFS)", "Priority Scheduling"],
+                correct: 2,
+                exp: "FCFS causes short CPU-burst processes to wait behind lengthy CPU-bound processes (Convoy Effect)."
+            },
+            {
+                id: 17,
+                category: "Database Management",
+                text: "Which normal form completely eliminates Transitive Functional Dependencies on the Primary Key?",
+                options: ["First Normal Form (1NF)", "Second Normal Form (2NF)", "Third Normal Form (3NF)", "Boyce-Codd Normal Form (BCNF)"],
+                correct: 2,
+                exp: "3NF requires the relation to be in 2NF and have no non-prime attribute transitively dependent on any candidate key."
+            },
+            {
+                id: 18,
+                category: "Database Management",
+                text: "In transaction processing, which ACID property guarantees that all operations succeed or none take effect?",
+                options: ["Atomicity", "Consistency", "Isolation", "Durability"],
+                correct: 0,
+                exp: "Atomicity is the 'all-or-nothing' rule ensuring partial failure never leaves the DB corrupted."
+            },
+            {
+                id: 19,
+                category: "Database Management",
+                text: "What is the primary difference between DROP and TRUNCATE commands in SQL?",
+                options: [
+                    "DROP deletes table schema and data (DDL), while TRUNCATE empties all rows keeping table structure intact (DDL)",
+                    "DROP is DML while TRUNCATE is DDL",
+                    "TRUNCATE can use WHERE clause whereas DROP cannot",
+                    "DROP is rollback-safe in all engines whereas TRUNCATE is never recorded"
+                ],
+                correct: 0,
+                exp: "DROP deletes table definition and contents. TRUNCATE rapidly deallocates rows retaining the table structure."
+            },
+            {
+                id: 20,
+                category: "Database Management",
+                text: "Which index structure is most widely adopted by modern relational database engines (e.g. MySQL, PostgreSQL)?",
+                options: ["Hash Index", "B+ Tree Index", "Binary Search Tree", "Inverted Index"],
+                correct: 1,
+                exp: "B+ Trees provide O(log N) point search and exceptionally fast range queries due to sequential leaf links."
+            }
+        ];
+
+        let selectedCategory = "";
+        let currentQuestions = [];
+        let currentIndex = 0;
+        let userAnswers = [];
+
+        function selectCategory(cat) {
+            selectedCategory = cat;
+            document.querySelectorAll('.cat-card').forEach(el => el.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+
+        function startTest() {
+            currentQuestions = selectedCategory 
+                ? questions.filter(q => q.category === selectedCategory)
+                : [...questions];
+            currentIndex = 0;
+            userAnswers = new Array(currentQuestions.length).fill(null);
+
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const q = currentQuestions[currentIndex];
+            document.getElementById('q-category').textContent = q.category;
+            document.getElementById('q-counter').textContent = `Question ${currentIndex + 1} of ${currentQuestions.length}`;
+            document.getElementById('q-text').textContent = `Q${currentIndex + 1}. ${q.text}`;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            const labels = ['A', 'B', 'C', 'D'];
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `option-btn ${userAnswers[currentIndex] === idx ? 'selected' : ''}`;
+                btn.innerHTML = `<strong>[${labels[idx]}]</strong> &nbsp; ${opt}`;
+                btn.onclick = () => selectOption(idx);
+                container.appendChild(btn);
+            });
+
+            document.getElementById('next-btn').textContent = (currentIndex === currentQuestions.length - 1) ? 'Submit Assessment' : 'Next Question →';
+        }
+
+        function selectOption(idx) {
+            userAnswers[currentIndex] = idx;
+            renderQuestion();
+        }
+
+        function skipQuestion() {
+            userAnswers[currentIndex] = null;
+            nextQuestion();
+        }
+
+        function nextQuestion() {
+            if (currentIndex < currentQuestions.length - 1) {
+                currentIndex++;
+                renderQuestion();
+            } else {
+                finishAssessment();
+            }
+        }
+
+        function finishAssessment() {
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+
+            let correctCount = 0;
+            currentQuestions.forEach((q, idx) => {
+                if (userAnswers[idx] === q.correct) {
+                    correctCount++;
+                }
+            });
+
+            const total = currentQuestions.length;
+            const pct = Math.round((correctCount / total) * 100);
+
+            document.getElementById('final-score').textContent = `${pct}%`;
+            document.getElementById('final-marks').textContent = `Score: ${correctCount} / ${total} Marks`;
+
+            let grade = "F";
+            if (pct >= 90) grade = "A+";
+            else if (pct >= 80) grade = "A";
+            else if (pct >= 70) grade = "B+";
+            else if (pct >= 60) grade = "B";
+            else if (pct >= 50) grade = "C";
+            else if (pct >= 40) grade = "P (Pass)";
+
+            document.getElementById('final-grade').textContent = `Assigned Grade: ${grade}`;
+
+            // Render review
+            const reviewContainer = document.getElementById('review-container');
+            reviewContainer.innerHTML = '';
+            const labels = ['A', 'B', 'C', 'D'];
+
+            currentQuestions.forEach((q, idx) => {
+                const ans = userAnswers[idx];
+                const isCorrect = (ans === q.correct);
+                const isSkipped = (ans === null);
+
+                const card = document.createElement('div');
+                card.className = 'review-card';
+                card.innerHTML = `
+                    <div style="font-weight: 600; margin-bottom: 0.5rem;">Q${idx + 1}. ${q.text}</div>
+                    <div style="font-size: 0.95rem;">
+                        Your Answer: ${isSkipped ? '<span style="color: var(--warning);">[Skipped]</span>' : (isCorrect ? `<span class="correct-tag">[${labels[ans]}] Correct</span>` : `<span class="wrong-tag">[${labels[ans]}] Incorrect</span>`)}
+                        &nbsp;|&nbsp; Correct Answer: <span class="correct-tag">[${labels[q.correct]}] ${q.options[q.correct]}</span>
+                    </div>
+                    <div class="explanation">💡 <strong>Technical Explanation:</strong> ${q.exp}</div>
+                `;
+                reviewContainer.appendChild(card);
+            });
+        }
+
+        function restartTest() {
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('start-screen').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
