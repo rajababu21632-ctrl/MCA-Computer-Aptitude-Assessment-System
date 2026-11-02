@@ -1,0 +1,10 @@
+# Prerequisites & Temporary Files
+*.o
+*.obj
+*.log
+
+# IDE / Editor Files
+.vscode/
+.idea/
+*.suo
+*.user

@@ -1,0 +1,6 @@
+28-Oct-2026 14:15:30|priya|Priya Verma|24MCA10284|Full Assessment|18|20|90.00|A+|PASS
+29-Oct-2026 11:20:10|student|Rahul Sharma|24MCA10250|Full Assessment|16|20|80.00|A|PASS
+30-Oct-2026 16:45:12|ankit|Ankit Kumar|24MCA10112|Data Structures|4|4|100.00|A+|PASS
+31-Oct-2026 10:05:44|simran|Simran Kaur|24MCA10305|C++ OOP Concepts|3|4|75.00|B+|PASS
+01-Nov-2026 18:30:20|rohit|Rohit Gupta|24MCA10190|Operating Systems|2|4|50.00|C|PASS
+02-Nov-2026 22:41:46|student|Rahul Sharma|24MCA10250|Data Structures|4|4|100.00|A+|PASS

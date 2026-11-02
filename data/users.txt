@@ -1,0 +1,4 @@
+admin|admin123|Prof. R. K. Sharma|ADMIN|CU-MCA-FAC01
+student|pass123|Rahul Sharma|STUDENT|24MCA10250
+priya|pass123|Priya Verma|STUDENT|24MCA10284
+Rajaa babu|RAJAAJI@123|Rajaa babu|STUDENT|26MCA20219
